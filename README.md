@@ -1,6 +1,6 @@
 # Playwright API Minimal – Generics Demo
 
-## Abstract (PL)
+## Abstract (in Polish)
 
 Minimalistyczny projekt pokazujący testowanie API w Playwright + TypeScript z naciskiem na użycie typów generycznych (*TypeScript Generics*).  
 Repozytorium prezentuje prostą, ale skalowalną architekturę klienta API z typowanymi odpowiedziami oraz reusable helperami.  
@@ -10,20 +10,13 @@ Projekt może służyć jako:
 - baza pod większy framework API testingowy.
 
 ---
-
-# Playwright API Minimal – Generics Demo
-
 ## Tech Stack
 
 - Playwright
 - TypeScript
 - Node.js
-- DummyJSON API
-
 ---
-
 ## Project Structure
-
 ```text
 playwright-api-minimal/
 │
@@ -41,7 +34,6 @@ playwright-api-minimal/
 ├── package.json
 └── tsconfig.json
 ```
-
 ### Structure Overview
 
 | Folder/File | Purpose |
