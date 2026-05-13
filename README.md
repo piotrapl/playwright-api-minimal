@@ -1,17 +1,13 @@
-# Playwright API Minimal – Generics Demo
+# Playwright API Minimal
 
 ## Abstract (PL)
 
-Minimalistyczny projekt pokazujący testowanie API w Playwright + TypeScript z naciskiem na użycie typów generycznych (*TypeScript Generics*).  
-Repozytorium prezentuje prostą, ale skalowalną architekturę klienta API z typowanymi odpowiedziami oraz reusable helperami.  
-Projekt może służyć jako:
-- demo do portfolio QA Automation,
-- materiał edukacyjny do nauki TypeScript,
-- baza pod większy framework API testingowy.
+Minimalistyczny projekt testów API oparty o Playwright i TypeScript.  
+Projekt pokazuje, jak budować lekką warstwę klienta API z użyciem TypeScript Generics.  
+Testy obejmują podstawowe operacje CRUD dla publicznego API DummyJSON.  
+Repozytorium może służyć jako prosty starter lub materiał edukacyjny do nauki Playwright API Testing.  
 
 ---
-
-# Playwright API Minimal – Generics Demo
 
 ## Tech Stack
 
@@ -22,225 +18,244 @@ Projekt może służyć jako:
 
 ---
 
-## Project Structure
+# 1a. Project Structure
 
 ```text
 playwright-api-minimal/
 │
+├── fixtures/
+│   └── api-fixtures.ts
+│
+├── models/
+│   └── product.ts
+│
 ├── tests/
-│   └── products.spec.ts
+│   └── product-api.spec.ts
 │
 ├── utils/
-│   ├── api-client.ts
-│   └── api-helpers.ts
+│   └── api-client.ts
 │
-├── types/
-│   └── api.types.ts
-│
-├── playwright.config.ts
 ├── package.json
+├── playwright.config.ts
 └── tsconfig.json
 ```
 
-### Structure Overview
+---
 
-| Folder/File | Purpose |
-|---|---|
-| `tests/` | API test cases |
-| `utils/api-client.ts` | Generic API client methods |
-| `utils/api-helpers.ts` | Reusable generic helper functions |
-| `types/api.types.ts` | TypeScript API response models |
-| `playwright.config.ts` | Playwright configuration |
+## Project Architecture
+
+### fixtures/api-fixtures.ts
+
+Creates a reusable Playwright fixture with a custom API client.
+
+Responsibilities:
+- dependency injection
+- API client initialization
+- centralized base URL configuration
 
 ---
 
-# Generic Types Applied in the Project
+### utils/api-client.ts
 
-The project demonstrates several important TypeScript generic patterns commonly used in modern API automation frameworks.
+Reusable generic API client.
+
+Responsibilities:
+- GET requests
+- POST requests
+- PUT requests
+- DELETE requests
+- typed API responses
 
 ---
 
-## 1. Generic API Response Type
+### models/product.ts
 
-### Example
+Defines the Product TypeScript model used by tests.
+
+---
+
+### tests/product-api.spec.ts
+
+Contains CRUD API tests for DummyJSON products endpoint.
+
+---
+
+# 2. Generic Types Applied in the Project
+
+This project demonstrates several practical TypeScript generic patterns.
+
+---
+
+## 2.1 Generic Class
+
+### Generic Configuration Type
 
 ```ts
-async get<T>(endpoint: string): Promise<T>
+export class ApiClient<TConfig> {
 ```
 
-### Purpose
+### Explanation
 
-Allows the API client to return different response types depending on the endpoint.
+`TConfig` allows the API client to work with different configuration objects.
 
-### Example Usage
-
-```ts
-const response = await apiClient.get<ProductResponse>('/products');
-```
-
-### Benefits
-
-- compile-time safety
-- autocomplete support
-- reusable API client
-- reduced type duplication
+Instead of hardcoding configuration types, the class becomes reusable and scalable.
 
 ---
 
-## 2. Generic Helper Functions
+## 2.2 Generic Response Type
 
-### Example
+### Generic GET Method
 
 ```ts
-export function getFirstItem<T>(items: T[]): T {
-  return items[0];
+async get<R>(url: string): Promise<R> {
+  const res = await this.request.get(this.config.baseUrl + url);
+  return await res.json() as R;
 }
 ```
 
-### Purpose
+### Explanation
 
-Makes helper functions reusable for many data types.
+`R` represents the expected response type.
 
-### Example Usage
+Example usage:
 
 ```ts
-const firstProduct = getFirstItem(products);
+const product = await api.get<Product>('/products/1');
 ```
 
-### Benefits
-
-- reusable utilities
-- strong typing
-- cleaner code
+The returned object is automatically typed as `Product`.
 
 ---
 
-## 3. Generic Array Operations
+## 2.3 Multiple Generic Parameters
+
+### POST Method
+
+```ts
+async post<R, B>(url: string, body: B): Promise<R> {
+  const res = await this.request.post(
+    this.config.baseUrl + url,
+    { data: body }
+  );
+
+  return await res.json() as R;
+}
+```
+
+### Explanation
+
+Two generic parameters are used:
+
+| Generic | Meaning |
+|---|---|
+| `R` | response type |
+| `B` | request body type |
+
+Example:
+
+```ts
+const created = await api.post<Product, Partial<Product>>(
+  '/products/add',
+  { title: 'Minimal Test', price: 100 }
+);
+```
+
+---
+
+## 2.4 Utility Generic Type — Partial<T>
 
 ### Example
 
 ```ts
-export function mapIds<T extends { id: number }>(items: T[]): number[]
+Partial<Product>
 ```
 
-### Purpose
+### Explanation
 
-Uses generic constraints (`extends`) to ensure objects contain required properties.
+`Partial<T>` converts all object properties into optional ones.
 
-### Benefits
-
-- safe reusable transformations
-- constraint-based typing
-- scalable helper design
-
----
-
-# Test Cases Run in the Project
-
-## 1. Get Products List
-
-### Flow
-
-1. Send GET request to `/products`
-2. Validate response status
-3. Validate response body
-4. Validate typed response structure
-
-### Example Assertions
+Original type:
 
 ```ts
-expect(response.products.length).toBeGreaterThan(0);
+type Product = {
+  id: number;
+  title: string;
+  price: number;
+};
 ```
+
+After applying `Partial<Product>`:
+
+```ts
+{
+  id?: number;
+  title?: string;
+  price?: number;
+}
+```
+
+Useful for:
+- PATCH requests
+- partial updates
+- lightweight payloads
 
 ---
 
-## 2. Extract First Product
-
-### Flow
-
-1. Fetch products
-2. Use generic helper
-3. Validate extracted object
+## 2.5 Generic Playwright Fixture Extension
 
 ### Example
 
 ```ts
-const firstProduct = getFirstItem(response.products);
+export const test = base.extend({
+  api: async ({ request }, use) => {
 ```
+
+### Explanation
+
+Playwright fixtures internally rely heavily on generic typing.
+
+This allows:
+- typed dependency injection
+- typed fixtures
+- IntelliSense support
+- safer test architecture
 
 ---
 
-## 3. Map Product IDs
+# 3. Test Cases Executed During Test Run
 
-### Flow
+The project executes the following API scenarios:
 
-1. Fetch products list
-2. Transform array using generic helper
-3. Verify mapped IDs
+| Test Case | HTTP Method | Endpoint | Purpose |
+|---|---|---|---|
+| Get single product | GET | `/products/1` | Validate product retrieval |
+| Create product | POST | `/products/add` | Validate product creation |
+| Update product | PUT | `/products/1` | Validate product update |
+| Delete product | DELETE | `/products/1` | Validate product deletion |
 
-### Example
+---
+
+## Example Assertions
+
+### GET validation
 
 ```ts
-const ids = mapIds(response.products);
+expect(product.id).toBe(1);
+expect(product.title).toBeTruthy();
+expect(product.price).toBeGreaterThan(0);
+```
+
+### PUT validation
+
+```ts
+expect(updated.price).toBe(123);
 ```
 
 ---
 
-# Why This Project Is Useful
+# Test Execution Timeline
 
-This repository demonstrates several important concepts valued in QA Automation projects:
-
-- reusable API architecture
-- TypeScript generics
-- typed API responses
-- scalable helper utilities
-- clean Playwright API testing structure
-
-It is intentionally minimal to make the generic concepts easier to understand.
-
----
-
-# Possible Improvements
-
-## Architecture
-
-- add service layer
-- add request builders
-- add environment configuration
-- add authentication handling
-
-## Testing
-
-- negative test cases
-- schema validation
-- contract testing
-- data-driven testing
-
-## Reporting & CI
-
-- GitHub Actions CI
-- Allure reporting
-- HTML reporting
-- test artifacts upload
-
-## TypeScript
-
-- discriminated unions
-- generic repositories
-- advanced mapped types
-- utility types
-
----
-
-# Run Tests
-
-## Install
-
-```bash
-npm install
-```
-
-## Run tests
+## 1. Playwright starts the test
 
 ```bash
 npx playwright test
@@ -248,7 +263,131 @@ npx playwright test
 
 ---
 
-# Example API Used
+## 2. Fixture initialization
 
-- DummyJSON:
+Playwright creates:
+
+- APIRequestContext
+- ApiClient instance
+
+---
+
+## 3. Test execution
+
+Example flow:
+
+```text
+Test
+ → api.get<Product>()
+   → ApiClient.get()
+     → HTTP request
+       → DummyJSON API
+         → JSON response
+```
+
+---
+
+## 4. Assertions execution
+
+Playwright validates:
+- response data
+- object fields
+- expected values
+
+---
+
+## 5. Test completion
+
+Playwright generates:
+- terminal report
+- HTML report (if enabled)
+
+---
+
+# Running Tests
+
+## Install dependencies
+
+```bash
+npm install
+```
+
+---
+
+## Run all tests
+
+```bash
+npx playwright test
+```
+
+---
+
+## Run specific file
+
+```bash
+npx playwright test tests/product-api.spec.ts
+```
+
+---
+
+# Possible Improvements
+
+## API Architecture
+
+- add dedicated services layer
+- introduce request logging
+- add response status validation
+- add retry mechanism
+
+---
+
+## TypeScript Improvements
+
+- stricter response typing
+- discriminated unions
+- generic API error models
+- reusable DTO types
+
+---
+
+## Playwright Improvements
+
+- environment configuration
+- parallel execution
+- CI integration
+- HTML reporting
+- Allure reporting
+
+---
+
+## Test Coverage Improvements
+
+Additional test scenarios:
+
+- negative API tests
+- invalid payload validation
+- schema validation
+- authorization tests
+- response time assertions
+- contract testing
+
+---
+
+# Why This Project Is Valuable
+
+This repository demonstrates:
+
+- practical Playwright API testing
+- TypeScript generics in real usage
+- reusable API client architecture
+- clean project structure
+- beginner-friendly but scalable design
+
+---
+
+# API Under Test
+
+The project uses:
+
+- DummyJSON API  
   https://dummyjson.com
