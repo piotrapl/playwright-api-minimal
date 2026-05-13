@@ -1,6 +1,6 @@
 # Playwright API Minimal
 
-## Abstract (PL)
+## Abstract (in Polish)
 
 Minimalistyczny projekt testów API oparty o Playwright i TypeScript.  
 Projekt pokazuje, jak budować lekką warstwę klienta API z użyciem TypeScript Generics.  
@@ -14,11 +14,9 @@ Repozytorium może służyć jako prosty starter lub materiał edukacyjny do nau
 - Playwright
 - TypeScript
 - Node.js
-- DummyJSON API
-
 ---
 
-# 1a. Project Structure
+## Project Structure
 
 ```text
 playwright-api-minimal/
@@ -40,43 +38,15 @@ playwright-api-minimal/
 └── tsconfig.json
 ```
 
----
+### Structure Overview
 
-## Project Architecture
-
-### fixtures/api-fixtures.ts
-
-Creates a reusable Playwright fixture with a custom API client.
-
-Responsibilities:
-- dependency injection
-- API client initialization
-- centralized base URL configuration
-
----
-
-### utils/api-client.ts
-
-Reusable generic API client.
-
-Responsibilities:
-- GET requests
-- POST requests
-- PUT requests
-- DELETE requests
-- typed API responses
-
----
-
-### models/product.ts
-
-Defines the Product TypeScript model used by tests.
-
----
-
-### tests/product-api.spec.ts
-
-Contains CRUD API tests for DummyJSON products endpoint.
+| Folder/File | Purpose |
+|---|---|
+| `tests/` | API test cases |
+| `utils/api-client.ts` | Generic API client methods |
+| `utils/api-helpers.ts` | Reusable generic helper functions |
+| `types/api.types.ts` | TypeScript API response models |
+| `playwright.config.ts` | Playwright configuration |
 
 ---
 
