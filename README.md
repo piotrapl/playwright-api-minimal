@@ -2,11 +2,9 @@
 
 ## Abstract (in Polish)
 
-Minimalistyczny projekt testów API oparty o Playwright i TypeScript.  
+Projekt testów API oparty o Playwright i TypeScript.  
 Projekt pokazuje, jak budować lekką warstwę klienta API z użyciem TypeScript Generics.  
-Testy obejmują podstawowe operacje CRUD dla publicznego API DummyJSON.  
-Repozytorium może służyć jako prosty starter lub materiał edukacyjny do nauki Playwright API Testing.  
-
+Testy obejmują podstawowe operacje CRUD dla publicznego API DummyJSON.   
 ---
 
 ## Tech Stack
