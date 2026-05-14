@@ -10,7 +10,7 @@ import { ApiClient } from '../utils/api-client';
  - ApiClient - klasa prawdopodobnie zawierająca metody do wykonywania zapytań HTTP..
 
  await use(client) - użycie tej instancji klienta w testach
- test - oznacza rozszerzony test, który będzie miał dostęp do klienta API
+ test - będzie oznaczał rozszerzoną klasę test, której obiekt będzie miał dostęp do klienta API
 */ 
 export const test = base.extend({
   api: async ({ request }, use) => {
