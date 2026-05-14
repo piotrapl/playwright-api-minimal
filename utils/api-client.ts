@@ -5,6 +5,9 @@ import { APIRequestContext } from '@playwright/test';
 - private bo jest używane tylko wewnątrz klasy ApiClient
 - dzięki genrykom, klasa ApiClient jest elastyczna i może być używana 
   z różnymi konfiguracjami i typami odpowiedzi, np. w testach można określić, że odpowiedzią będzie obiekt typu Product,
+- zapis ApiClient<TConfig> oznacza, że klasa ApiClient jest generyczna 
+  i przyjmuje typ TConfig, który reprezentuje konfigurację klienta API,
+  to powoduje, że możemy tworzyć różne instancje ApiClient z różnymi konfiguracjami, 
 */
 export class ApiClient<TConfig> {
   constructor(
