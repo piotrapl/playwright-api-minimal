@@ -1,5 +1,11 @@
 import { APIRequestContext } from '@playwright/test';
 
+/* 
+- APIRequestContext to typ z Playwright, który reprezentuje kontekst zapytań API,
+- private bo jest używane tylko wewnątrz klasy ApiClient
+- dzięki genrykom, klasa ApiClient jest elastyczna i może być używana 
+  z różnymi konfiguracjami i typami odpowiedzi, np. w testach można określić, że odpowiedzią będzie obiekt typu Product,
+*/
 export class ApiClient<TConfig> {
   constructor(
     private request: APIRequestContext,
