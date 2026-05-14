@@ -1,6 +1,11 @@
 import { test, expect } from '../fixtures/api-fixtures';
 import { Product } from '../models/product';
 
+/*
+ - to są testy API dla endpointów związanych z produktami.
+ - każdy test korzysta z klienta API, który jest dostępny dzięki rozszerzeniu testów w api-fixtures.ts.
+ - testy sprawdzają: GET, POST, PUT, DELETE
+*/
 test('GET /products/1', async ({ api }) => {
   const product = await api.get<Product>('/products/1');
 
