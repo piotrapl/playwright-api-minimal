@@ -6,6 +6,11 @@ export class ApiClient<TConfig> {
     public config: TConfig
   ) {}
 
+/* Metody do wykonywania zapytań HTTP: GET, POST, PUT, DELETE.
+Każda metoda przyjmuje URL i opcjonalnie body (dla POST i PUT), 
+na koniec 
+zwraca odpowiedź jako obiekt typu R (który jest określany podczas wywoływania metody). 
+*/
   async get<R>(url: string): Promise<R> {
     const res = await this.request.get(this.config.baseUrl + url);
     return await res.json() as R;
@@ -26,3 +31,8 @@ export class ApiClient<TConfig> {
     return await res.json() as R;
   }
 }
+
+/* dzięki typom generycznym, ApiClient jest elastyczny i może być używany 
+z różnymi konfiguracjami i typami odpowiedzi,
+na przykład w testach można określić, że odpowiedzią będzie obiekt typu Product,
+a konfiguracja może zawierać różne ustawienia, takie jak baseUrl, nagłówki itp. */
