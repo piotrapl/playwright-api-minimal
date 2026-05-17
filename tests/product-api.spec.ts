@@ -37,3 +37,9 @@ test('DELETE /products/1', async ({ api }) => {
 
   expect(deleted.id).toBe(1);
 });
+
+/*
+To są podstawowe testy CRUD dla endpointów produktów:
+.toBeTruthy() - sprawdza, czy wartość jest prawdziwa (nie jest null, undefined, 0, false, itp.)
+.toBeGreaterThan(0) - sprawdza, czy wartość jest większa niż 0
+*/
