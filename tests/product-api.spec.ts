@@ -43,6 +43,9 @@ To są podstawowe testy CRUD dla endpointów produktów:
 .toBeTruthy() - sprawdza, czy wartość jest prawdziwa (nie jest null, undefined, 0, false, itp.)
 .toBeGreaterThan(0) - sprawdza, czy wartość jest większa niż 0
 
+async ({ api }) => { - to jest funkcja asynchroniczna, która otrzymuje obiekt api (klient API) 
+    jako argument, dzięki temu możemy wykonywać zapytania do API w naszych testach.
+
 Partial<Product> - to typ TypeScript, który oznacza, że wszystkie właściwości typu Product
          są opcjonalne
 */
