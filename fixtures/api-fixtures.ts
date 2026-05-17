@@ -23,4 +23,4 @@ export const expect = test.expect;
 
  await use(client) - użycie tej instancji klienta w testach
  test - będzie oznaczał rozszerzoną klasę test, której obiekt będzie miał dostęp do klienta API
-*/ 
+*/  

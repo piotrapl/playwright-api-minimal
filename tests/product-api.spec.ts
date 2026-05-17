@@ -42,4 +42,7 @@ test('DELETE /products/1', async ({ api }) => {
 To są podstawowe testy CRUD dla endpointów produktów:
 .toBeTruthy() - sprawdza, czy wartość jest prawdziwa (nie jest null, undefined, 0, false, itp.)
 .toBeGreaterThan(0) - sprawdza, czy wartość jest większa niż 0
+
+Partial<Product> - to typ TypeScript, który oznacza, że wszystkie właściwości typu Product
+         są opcjonalne
 */
