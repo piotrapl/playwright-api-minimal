@@ -23,7 +23,9 @@ export class ApiClient<TConfig extends { baseUrl: string }> {
   }
 
   private logResponse(status: number, body: any): void {
-    console.log(`[ApiClient] response`, { status, body });
+    if (status < 200 || status >= 300) {
+      console.log(`[ApiClient] response`, { status, body });
+    }
   }
 
 /* Metody do wykonywania zapytań HTTP: GET, POST, PUT, DELETE.
