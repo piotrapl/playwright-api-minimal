@@ -9,7 +9,7 @@ import { APIRequestContext } from '@playwright/test';
   i przyjmuje typ TConfig, który reprezentuje konfigurację klienta API,
   to powoduje, że możemy tworzyć różne instancje ApiClient z różnymi konfiguracjami, 
 */
-export class ApiClient<TConfig> {
+export class ApiClient<TConfig extends { baseUrl: string }> {
   constructor(
     private request: APIRequestContext,
     public config: TConfig
