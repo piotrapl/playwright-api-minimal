@@ -15,6 +15,17 @@ export class ApiClient<TConfig extends { baseUrl: string }> {
     public config: TConfig
   ) {}
 
+  private logRequest(method: string, url: string, body?: any): void {
+    const message = body
+      ? `[ApiClient] ${method} ${url}`
+      : `[ApiClient] ${method} ${url}`;
+    console.log(message, body ? { body } : '');
+  }
+
+  private logResponse(status: number, body: any): void {
+    console.log(`[ApiClient] response`, { status, body });
+  }
+
 /* Metody do wykonywania zapytań HTTP: GET, POST, PUT, DELETE.
 Każda metoda przyjmuje URL i opcjonalnie body (dla POST i PUT), 
 na koniec 
@@ -22,37 +33,37 @@ zwraca odpowiedź jako obiekt typu R (który jest określany podczas wywoływani
 */
   async get<R>(url: string): Promise<R> {
     const fullUrl = this.config.baseUrl + url;
-    console.log(`[ApiClient] GET ${fullUrl}`);
+    this.logRequest('GET', fullUrl);
     const res = await this.request.get(fullUrl);
     const body = await res.json() as R;
-    console.log(`[ApiClient] response`, { status: res.status(), body });
+    this.logResponse(res.status(), body);
     return body;
   }
 
   async post<R, B>(url: string, body: B): Promise<R> {
     const fullUrl = this.config.baseUrl + url;
-    console.log(`[ApiClient] POST ${fullUrl}`, { body });
+    this.logRequest('POST', fullUrl, body);
     const res = await this.request.post(fullUrl, { data: body });
     const responseBody = await res.json() as R;
-    console.log(`[ApiClient] response`, { status: res.status(), body: responseBody });
+    this.logResponse(res.status(), responseBody);
     return responseBody;
   }
 
   async put<R, B>(url: string, body: B): Promise<R> {
     const fullUrl = this.config.baseUrl + url;
-    console.log(`[ApiClient] PUT ${fullUrl}`, { body });
+    this.logRequest('PUT', fullUrl, body);
     const res = await this.request.put(fullUrl, { data: body });
     const responseBody = await res.json() as R;
-    console.log(`[ApiClient] response`, { status: res.status(), body: responseBody });
+    this.logResponse(res.status(), responseBody);
     return responseBody;
   }
 
   async delete<R>(url: string): Promise<R> {
     const fullUrl = this.config.baseUrl + url;
-    console.log(`[ApiClient] DELETE ${fullUrl}`);
+    this.logRequest('DELETE', fullUrl);
     const res = await this.request.delete(fullUrl);
     const body = await res.json() as R;
-    console.log(`[ApiClient] response`, { status: res.status(), body });
+    this.logResponse(res.status(), body);
     return body;
   }
 }
