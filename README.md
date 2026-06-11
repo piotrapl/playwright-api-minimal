@@ -1,5 +1,7 @@
 # Playwright API Minimal
 
+[![CI Status](https://github.com/piotrapl/playwright-api-minimal/actions/workflows/playwright-api-tests.yaml/badge.svg)](https://github.com/piotrapl/playwright-api-minimal/actions/workflows/playwright-api-tests.yaml)
+
 ## Abstract (in Polish)
 
 #### Projekt testów API oparty o Playwright i TypeScript. 
